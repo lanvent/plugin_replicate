@@ -1,0 +1,2 @@
+--extra-index-url https://pypi.python.org/simple
+replicate>=0.7.0
