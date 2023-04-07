@@ -8,6 +8,8 @@
 
 将`config.json.template`复制为`config.json`，修改`API token`，并修改其中的参数和规则。
 
+`Railway`支持使用环境变量(`replicate_api_token`或`REPLICATE_API_TOKEN`)方式传递`API token`，
+
 ### 画图请求格式
 
 > 请**注意**，你需要满足每个`model`规定的`API`限制。
