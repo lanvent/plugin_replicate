@@ -15,18 +15,30 @@ class SDWebUI(Plugin):
         super().__init__()
         curdir = os.path.dirname(__file__)
         config_path = os.path.join(curdir, "config.json")
+        if not os.path.exists(config_path):
+            logger.info('[RP] 配置文件不存在，将使用config-template.json模板')
+            config_path = os.path.join(curdir, "config.json.template")
         try:
-            
+            self.apitoken = None
+            if os.environ.get("replicate_api_token", None):
+                self.apitoken = os.environ.get("replicate_api_token")
+            if os.environ.get("replicate_api_token".upper(), None):
+                self.apitoken = os.environ.get("replicate_api_token".upper())
+
             with open(config_path, "r", encoding="utf-8") as f:
                 config = json.load(f)
                 self.rules = config["rules"]
                 self.default_params = config["defaults"]
-                self.client = replicate.Client(config["replicate_api_token"])
+                if not self.apitoken:
+                    self.apitoken = config["replicate_api_token"]
+                if self.apitoken == "YOUR API TOKEN":
+                    raise Exception("please set your api token in config or environment variable.")
+                self.client = replicate.Client(self.apitoken)
             self.handlers[Event.ON_HANDLE_CONTEXT] = self.on_handle_context
             logger.info("[RP] inited")
         except Exception as e:
             if isinstance(e, FileNotFoundError):
-                logger.warn(f"[RP] init failed, {config_path} not found.")
+                logger.warn(f"[RP] init failed, config.json not found.")
             else:
                 logger.warn("[RP] init failed.")
             raise e
@@ -56,7 +68,6 @@ class SDWebUI(Plugin):
                 reply.content = self.get_help_text(verbose = True)
             else:
                 rule_params = {}
-                rule_options = {}
                 for keyword in keywords:
                     matched = False
                     for rule in self.rules:
