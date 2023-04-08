@@ -1,6 +1,7 @@
 {
   "replicate_api_token": "YOUR API TOKEN",
   "defaults": {
+    "image": false,
     "model": "cjwbw/anything-v3-better-vae",
     "version": "09a5805203f4c12da649ec1923bb7729517ca25fcac790e640eaa9ed66573b65",
     "negative_prompt": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name",
@@ -69,6 +70,22 @@
         "guidance_scale": 7
       },
       "desc": "使用未来风格模型出图"
+    },
+    {
+      "keywords": [
+        "修复",
+        "fix"
+      ],
+      "params": {
+        "model": "sczhou/codeformer",
+        "version": "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56",
+        "image": true,
+        "upscale": 2,
+        "face_upsample": true,
+        "background_enhance": true,
+        "codeformer_fidelity": 0.7
+      },
+      "desc": "修复人像图片"
     }
   ]
 }
