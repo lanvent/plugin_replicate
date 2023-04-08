@@ -86,7 +86,7 @@ class Replicate(Plugin):
                     params["prompt"] = params.get("prompt", "")+f", {prompt}"
                     logger.info("[RP] params={}".format(params))
 
-                    if params.get("image",False):
+                    if params.get("image",None):
                         self.params_cache[user_id] = params
                         reply.type = ReplyType.INFO
                         reply.content = "请发送一张图片给我"
@@ -100,11 +100,12 @@ class Replicate(Plugin):
                     e_context['reply'] = reply
             else:
                 cmsg = e_context['context']['msg']
-                print(content)
                 if user_id in self.params_cache:
-                    params = self.params_cache.pop(user_id)[0]
+                    params = self.params_cache[user_id]
+                    del self.params_cache[user_id]
                     cmsg.prepare()
-                    params["image"]=open(content,"rb")
+                    img_key = params.pop("image")
+                    params[img_key]=open(content,"rb")
                     model = self.client.models.get(params.pop("model"))
                     version = model.versions.get(params.pop("version"))
                     result = version.predict(**params)
