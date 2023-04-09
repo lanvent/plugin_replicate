@@ -61,6 +61,8 @@ class Replicate(Plugin):
                 # 解析用户输入 如"横版 高清 二次元:cat"
                 if ":" in content:
                     keywords, prompt = content.split(":", 1)
+                elif "：" in content:
+                    keywords, prompt = content.split("：", 1)
                 else:
                     keywords = content
                     prompt = ""
