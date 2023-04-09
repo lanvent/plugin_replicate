@@ -85,6 +85,21 @@
         "codeformer_fidelity": 0.7
       },
       "desc": "修复人像图片"
+    },
+    {
+      "keywords": [
+        "open",
+        "openjourney"
+      ],
+      "params": {
+        "model": "prompthero/openjourney",
+        "version": "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
+        "negative_prompt": "",
+        "prompt": "mdjrny-v4 style, masterpiece, 8k, best quality, illustration, beautiful detailed, finely detailed, dramatic light, intricate details",
+        "num_inference_steps": 30,
+        "guidance_scale": 7
+      },
+      "desc": "使用openjourney模型出图"
     }
   ]
 }

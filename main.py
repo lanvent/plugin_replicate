@@ -59,6 +59,7 @@ class Replicate(Plugin):
             content = e_context['context'].content[:]
             if e_context['context'].type == ContextType.IMAGE_CREATE:
                 # 解析用户输入 如"横版 高清 二次元:cat"
+                content = content.replace("，", ",").replace("：", ":")
                 if ":" in content:
                     keywords, prompt = content.split(":", 1)
                 else:
