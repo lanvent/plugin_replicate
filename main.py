@@ -42,7 +42,7 @@ class Replicate(Plugin):
             if isinstance(e, FileNotFoundError):
                 logger.warn(f"[RP] init failed, config.json not found.")
             else:
-                logger.warn("[RP] init failed.")
+                logger.warn("[RP] init failed." + str(e))
             raise e
     
     def on_handle_context(self, e_context: EventContext):
