@@ -67,7 +67,7 @@ class Replicate(Plugin):
                     prompt = ""
 
                 keywords = keywords.split()
-
+                unused_keywords = []
                 if "help" in keywords or "帮助" in keywords:
                     reply.type = ReplyType.INFO
                     reply.content = self.get_help_text(verbose = True)
@@ -82,10 +82,19 @@ class Replicate(Plugin):
                                 matched = True
                                 break  # 一个关键词只匹配一个规则
                         if not matched:
-                            logger.warning("[RP] keyword not matched: %s" % keyword)
+                            unused_keywords.append(keyword)
+                            logger.info("[RP] keyword not matched: %s, add to prompt" % keyword)
                     params = {**self.default_params, **rule_params}
-                    params["prompt"] = params.get("prompt", "")+f", {prompt}"
+                    params["prompt"] = params.get("prompt", "")
+                    if prompt:
+                        params["prompt"] += f", {prompt}"
+                    if unused_keywords:
+                        params["prompt"] += f", {', '.join(unused_keywords)}"
                     logger.info("[RP] params={}".format(params))
+
+                    if params.get("model",None) is None or params.get("version",None) is None:
+                        logger.info("[RP] model or version not set, exit")
+                        return
 
                     if params.get("image",None):
                         self.params_cache[user_id] = params
