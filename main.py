@@ -104,8 +104,10 @@ class Replicate(Plugin):
                         model = self.client.models.get(params.pop("model"))
                         version = model.versions.get(params.pop("version"))
                         result = version.predict(**params)
+                        if isinstance(result, list):
+                            result = result[-1]
                         reply.type = ReplyType.IMAGE_URL
-                        reply.content = result[0]
+                        reply.content = result
                     e_context.action = EventAction.BREAK_PASS  # 事件结束后，跳过处理context的默认逻辑
                     e_context['reply'] = reply
             else:
@@ -119,6 +121,8 @@ class Replicate(Plugin):
                     model = self.client.models.get(params.pop("model"))
                     version = model.versions.get(params.pop("version"))
                     result = version.predict(**params)
+                    if isinstance(result, list):
+                        result = result[-1]
                     reply.type = ReplyType.IMAGE_URL
                     reply.content = result
                     logger.info("[RP] result={}".format(result))
