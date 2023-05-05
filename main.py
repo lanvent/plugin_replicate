@@ -103,6 +103,10 @@ class Replicate(Plugin):
                     else:
                         model = self.client.models.get(params.pop("model"))
                         version = model.versions.get(params.pop("version"))
+                        if "_model" in params:
+                            params["model"] = params.pop("_model")
+                        if "_version" in params:
+                            params["version"] = params.pop("_version")
                         result = version.predict(**params)
                         if isinstance(result, list):
                             result = result[-1]
@@ -120,6 +124,10 @@ class Replicate(Plugin):
                     params[img_key]=open(content,"rb")
                     model = self.client.models.get(params.pop("model"))
                     version = model.versions.get(params.pop("version"))
+                    if "_model" in params:
+                        params["model"] = params.pop("_model")
+                    if "_version" in params:
+                        params["version"] = params.pop("_version")
                     result = version.predict(**params)
                     if isinstance(result, list):
                         result = result[-1]

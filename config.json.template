@@ -100,6 +100,18 @@
         "guidance_scale": 7
       },
       "desc": "使用openjourney模型出图"
+    },
+    {
+      "keywords": [
+        "去除模糊"
+      ],
+      "params": {
+        "model": "google-research/maxim",
+        "version": "494ca4d578293b4b93945115601b6a38190519da18467556ca223d219c3af9f9",
+        "_model": "Image Deblurring (GoPro)",
+        "image": "image"
+      },
+      "desc": "去除运动模糊"
     }
   ]
 }

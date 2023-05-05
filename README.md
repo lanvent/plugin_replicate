@@ -15,7 +15,8 @@
 
 ### 画图请求格式
 
-> 2022.04.09 新增图生图功能，如果关键词需要触发图片输入的模型，请在它的参数中添加```"image": <API规定上传图片的参数名>```
+> 2023.05.05 API中如果包含`model`/`version`参数，比如[maxim API](https://replicate.com/google-research/maxim),请使用`_model`和`_version`来表示这些参数，程序中会自动替换它们。
+> 2023.04.09 新增图生图功能，如果关键词需要触发图片输入的模型，请在它的参数中添加```"image": <API规定上传图片的参数名>```
 > 例如：[gfpgan](https://replicate.com/tencentarc/gfpgan/api)的图片上传参数是`img`，那么它的参数中应该添加```"image": "img"```
 > 在触发该关键词后，插件会请求你发送一张图片。
 
