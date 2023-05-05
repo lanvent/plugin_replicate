@@ -1,6 +1,8 @@
 # encoding:utf-8
 import json
 import os
+import langid
+from bridge.bridge import Bridge
 from bridge.context import ContextType
 from bridge.reply import Reply, ReplyType
 from config import conf
@@ -10,7 +12,7 @@ from common.log import logger
 import replicate
 from common.expired_dict import ExpiredDict
 
-@plugins.register(name="replicate", desc="利用replicate api来画图", version="0.2", author="lanvent")
+@plugins.register(name="replicate", desc="利用replicate api来画图", version="0.3", author="lanvent")
 class Replicate(Plugin):
     def __init__(self):
         super().__init__()
@@ -36,6 +38,7 @@ class Replicate(Plugin):
                 if self.apitoken == "YOUR API TOKEN":
                     raise Exception("please set your api token in config or environment variable.")
                 self.client = replicate.Client(self.apitoken)
+                self.translate_prompt = config.get("translate_prompt", False)
             self.handlers[Event.ON_HANDLE_CONTEXT] = self.on_handle_context
             logger.info("[RP] inited")
         except Exception as e:
@@ -86,10 +89,22 @@ class Replicate(Plugin):
                             logger.info("[RP] keyword not matched: %s, add to prompt" % keyword)
                     params = {**self.default_params, **rule_params}
                     params["prompt"] = params.get("prompt", "")
-                    if prompt:
-                        params["prompt"] += f", {prompt}"
                     if unused_keywords:
-                        params["prompt"] += f", {', '.join(unused_keywords)}"
+                        if prompt:
+                            prompt += f", {', '.join(unused_keywords)}"
+                        else:
+                            prompt = ', '.join(unused_keywords)
+                    if prompt:
+                        if self.translate_prompt:
+                            lang = langid.classify(prompt)[0]
+                            if lang != "en":
+                                logger.info("[RP] translate prompt from {} to en".format(lang))
+                                try:
+                                    prompt = Bridge().fetch_translate(prompt, to_lang= "en")
+                                except Exception as e:
+                                    logger.info("[RP] translate failed: {}".format(e))
+                                logger.info("[RP] translated prompt={}".format(prompt))
+                        params["prompt"] += f", {prompt}"
                     logger.info("[RP] params={}".format(params))
 
                     if params.get("model",None) is None or params.get("version",None) is None:
